@@ -1,10 +1,9 @@
 const createError = require('http-errors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
+// const cors = require('cors');
 const mongoConfig = require('./configs/mongo-config');
 // const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -20,9 +19,8 @@ mongoose.connect(mongoConfig, { autoIndex: true, useCreateIndex: true, useNewUrl
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
-app.use(logger('dev'));
 app.use(express.json({}));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -31,7 +29,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //routers
-// app.use('/', indexRouter);
+app.use('/', (_, res, __) => {
+  res.json({ message: "Up and running" });
+});
 app.use('/categories', categoriesRouter);
 app.use('/departments', departmentsRouter);
 app.use('/products', productsRouter);
